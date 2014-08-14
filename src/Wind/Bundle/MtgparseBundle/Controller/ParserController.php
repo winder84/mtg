@@ -43,7 +43,7 @@ class ParserController extends Controller
 	public function parsingAction() {
 //		$colors = array('W', 'U', 'B', 'R', 'G');
 		$colors = array('G');
-		$times[] = date('d.m.Y H:i:s');
+		$times[] = 'start - ' . date('d.m.Y H:i:s');
 		foreach ($colors as $color) {
 			$newCard = 0;
 			$cardsIds = array();
@@ -54,7 +54,7 @@ class ParserController extends Controller
 				preg_match_all('!<a href="../Card/Details.aspx\?multiverseid=(\d+)"!si', $siteData, $cardsData);
 				$cardsIds = array_merge($cardsIds, $cardsData[1]);
 			}
-			$times[] = $color . ' - ' . date('d.m.Y H:i:s');
+			$times[] = 'parced - ' . $color . ' ' . date('d.m.Y H:i:s');
 			$em = $this->getDoctrine()->getManager();
 			foreach ($cardsIds as $carId) {
 				$cardIdObj = $em->getRepository('WindMtgparseBundle:Cardid');
@@ -92,9 +92,10 @@ class ParserController extends Controller
 				$em->persist($cardIdObj, true);
 				$em->flush();
 			}
+			$times[] = 'writed - ' . $color . ' ' . date('d.m.Y H:i:s');
 			$msgs[] = $newCard . ' ' . $color;
 		}
-		$times[] = date('d.m.Y H:i:s');
+		$times[] = 'end - ' . date('d.m.Y H:i:s');
 
 		return $this->render('WindMtgparseBundle:Parser:parsing.html.twig', array(
 			'retrys' => $retrys,
