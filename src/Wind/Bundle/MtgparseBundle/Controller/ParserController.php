@@ -41,29 +41,33 @@ class ParserController extends Controller
 	}
 
 	public function parsingAction() {
-		$colors = array('W', 'U', 'B', 'R', 'G');
+//		$colors = array('W', 'U', 'B', 'R', 'G');
+		$colors = array('G');
+		$times[] = date('d.m.Y H:i:s');
 		foreach ($colors as $color) {
 			$newCard = 0;
 			$cardsIds = array();
+			$retrys = array();
+			$msgs = array();
 			for ($i=0; $i<=60; $i++) {
 				$siteData = file_get_contents("http://gatherer.wizards.com/Pages/Search/Default.aspx?page={$i}&color=%7C%5B{$color}%5D");
 				preg_match_all('!<a href="../Card/Details.aspx\?multiverseid=(\d+)"!si', $siteData, $cardsData);
 				$cardsIds = array_merge($cardsIds, $cardsData[1]);
-				sleep(1);
 			}
+			$times[] = $color . ' - ' . date('d.m.Y H:i:s');
 			$em = $this->getDoctrine()->getManager();
 			foreach ($cardsIds as $carId) {
 				$cardIdObj = $em->getRepository('WindMtgparseBundle:Cardid');
-				$cardIdObj = $cardIdObj->findBy(array(
+				$cardIdObj = $cardIdObj->findOneBy(array(
 					'cardId' => $carId
 				));
 				$isNewColor = true;
-				if (empty($cardIdObj)) {
+				if (!$cardIdObj) {
 					$cardIdObj = new Cardid();
 					$newCard++;
 				} else {
-					$retrys[$cardIdObj[0]->getId()] = $carId;
-					$cardIdObj = $cardIdObj[0];
+					$retrys[$cardIdObj->getId()] = $carId;
+					$cardIdObj = $cardIdObj;
 					foreach ($cardIdObj->getCardcolors()->toArray() as $dd) {
 						if ($dd->getColor() == $color) {
 							$isNewColor = false;
@@ -71,14 +75,14 @@ class ParserController extends Controller
 					}
 				}
 				$cardColorObj = $em->getRepository('WindMtgparseBundle:Cardcolor');
-				$cardColor = $cardColorObj->findBy(array(
+				$cardColor = $cardColorObj->findOneBy(array(
 					'color' => $color
 				));
-				if (empty($cardColor)) {
+				if (!$cardColor) {
 					$cardColor = new Cardcolor();
 					$cardColor->setColor($color);
 				} else {
-					$cardColor = $cardColor[0];
+					$cardColor = $cardColor;
 				}
 				if ($isNewColor) {
 					$cardIdObj->addCardcolor($cardColor);
@@ -90,9 +94,11 @@ class ParserController extends Controller
 			}
 			$msgs[] = $newCard . ' ' . $color;
 		}
+		$times[] = date('d.m.Y H:i:s');
 
 		return $this->render('WindMtgparseBundle:Parser:parsing.html.twig', array(
 			'retrys' => $retrys,
+			'times' => $times,
 			'msgs' => $msgs
 		));
 	}
