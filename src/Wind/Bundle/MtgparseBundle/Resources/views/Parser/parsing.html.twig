@@ -2,14 +2,10 @@
 	{{ msg }} <br />
 {% endfor %}
 <br />
-{% for time in times %}
-	{{ time }} <br />
-{% endfor %}
-<br />
+Повторы ({{ retrys|length }}) <br />
 
-<div style="width: 600px;">
-	Повторы ({{ retrys|length }}): <br />
-	{% for key,retry in retrys %}
-		{{ key }} - {{ retry }} <br />
-	{% endfor %}
-</div>
+{#<div style="width: 600px;">#}
+	{#{% for key,retry in retrys %}#}
+		{#{{ key }} - {{ retry }} <br />#}
+	{#{% endfor %}#}
+{#</div>#}
