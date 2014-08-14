@@ -1,0 +1,4 @@
+wind_mtgparse:
+    resource: "@WindMtgparseBundle/Resources/config/routing.yml"
+    prefix:   /admin/mtg/parse
+

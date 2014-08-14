@@ -1,0 +1,7 @@
+parameters:
+#    wind_mtgparse.example.class: Wind\Bundle\MtgparseBundle\Example
+
+services:
+#    wind_mtgparse.example:
+#        class: %wind_mtgparse.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,10 @@
+{% for msg in msgs %}
+	{{ msg }} <br />
+{% endfor %}
+
+<div style="width: 600px;">
+	Повторы ({{ retrys|length }}): <br />
+	{% for key,retry in retrys %}
+		{{ key }} - {{ retry }} <br />
+	{% endfor %}
+</div>

@@ -1,0 +1,7 @@
+wind_mtgparse_question:
+    path:     /takeit
+    defaults: { _controller: WindMtgparseBundle:Parser:question }
+
+wind_mtgparse_parsing:
+    path:     /parsing
+    defaults: { _controller: WindMtgparseBundle:Parser:parsing }
