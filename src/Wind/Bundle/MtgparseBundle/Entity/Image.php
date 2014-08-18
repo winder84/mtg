@@ -3,27 +3,23 @@
 namespace Wind\Bundle\MtgparseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Cardtype
+ * Image
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
-class Cardtype
+class Image
 {
 	/**
-	 * @ORM\ManyToMany(targetEntity="Cardid", mappedBy="cardtypes")
-	 */
-	private $cardids;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="Card", mappedBy="cardtypes")
+	 * @ORM\ManyToMany(targetEntity="Card", mappedBy="images")
 	 */
 	private $cards;
 
 	public function __construct() {
-		$this->cardids = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->cards = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
@@ -37,11 +33,13 @@ class Cardtype
     private $id;
 
     /**
-     * @var string
+	 * Image name
+	 *
+	 * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255)
      */
-    private $type;
+    private $name;
 
 
     /**
@@ -55,66 +53,34 @@ class Cardtype
     }
 
     /**
-     * Set type
+     * Set name
      *
-     * @param string $type
-     * @return Cardtype
+     * @param string $name
+     * @return Image
      */
-    public function setType($type)
+    public function setName($name)
     {
-        $this->type = $type;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get name
      *
      * @return string 
      */
-    public function getType()
+    public function getName()
     {
-        return $this->type;
+        return $this->name;
     }
 
-    /**
-     * Add cardids
-     *
-     * @param \Wind\Bundle\MtgparseBundle\Entity\Cardid $cardids
-     * @return Cardtype
-     */
-    public function addCardid(\Wind\Bundle\MtgparseBundle\Entity\Cardid $cardids)
-    {
-        $this->cardids[] = $cardids;
-
-        return $this;
-    }
-
-    /**
-     * Remove cardids
-     *
-     * @param \Wind\Bundle\MtgparseBundle\Entity\Cardid $cardids
-     */
-    public function removeCardid(\Wind\Bundle\MtgparseBundle\Entity\Cardid $cardids)
-    {
-        $this->cardids->removeElement($cardids);
-    }
-
-    /**
-     * Get cardids
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCardids()
-    {
-        return $this->cardids;
-    }
 
     /**
      * Add cards
      *
      * @param \Wind\Bundle\MtgparseBundle\Entity\Card $cards
-     * @return Cardtype
+     * @return Image
      */
     public function addCard(\Wind\Bundle\MtgparseBundle\Entity\Card $cards)
     {

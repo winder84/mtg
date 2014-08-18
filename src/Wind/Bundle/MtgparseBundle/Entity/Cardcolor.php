@@ -17,8 +17,14 @@ class Cardcolor
 	 */
 	private $cardids;
 
+	/**
+	 * @ORM\ManyToMany(targetEntity="Card", mappedBy="cardcolors")
+	 */
+	private $cards;
+
 	public function __construct() {
 		$this->cardids = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->cards = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
     /**
@@ -102,5 +108,38 @@ class Cardcolor
     public function getCardids()
     {
         return $this->cardids;
+    }
+
+    /**
+     * Add cards
+     *
+     * @param \Wind\Bundle\MtgparseBundle\Entity\Card $cards
+     * @return Cardcolor
+     */
+    public function addCard(\Wind\Bundle\MtgparseBundle\Entity\Card $cards)
+    {
+        $this->cards[] = $cards;
+
+        return $this;
+    }
+
+    /**
+     * Remove cards
+     *
+     * @param \Wind\Bundle\MtgparseBundle\Entity\Card $cards
+     */
+    public function removeCard(\Wind\Bundle\MtgparseBundle\Entity\Card $cards)
+    {
+        $this->cards->removeElement($cards);
+    }
+
+    /**
+     * Get cards
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCards()
+    {
+        return $this->cards;
     }
 }

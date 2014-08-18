@@ -5,25 +5,19 @@ namespace Wind\Bundle\MtgparseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cardtype
+ * Cardrarity
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Cardtype
+class Cardrarity
 {
 	/**
-	 * @ORM\ManyToMany(targetEntity="Cardid", mappedBy="cardtypes")
-	 */
-	private $cardids;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="Card", mappedBy="cardtypes")
+	 * @ORM\ManyToMany(targetEntity="Card", mappedBy="cardrarities")
 	 */
 	private $cards;
 
 	public function __construct() {
-		$this->cardids = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->cards = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
@@ -39,9 +33,9 @@ class Cardtype
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="rarity", type="string", length=255)
      */
-    private $type;
+    private $rariry;
 
 
     /**
@@ -55,66 +49,33 @@ class Cardtype
     }
 
     /**
-     * Set type
+     * Set rariry
      *
-     * @param string $type
-     * @return Cardtype
+     * @param string $rariry
+     * @return Cardrarity
      */
-    public function setType($type)
+    public function setRariry($rariry)
     {
-        $this->type = $type;
+        $this->rariry = $rariry;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get rariry
      *
      * @return string 
      */
-    public function getType()
+    public function getRariry()
     {
-        return $this->type;
-    }
-
-    /**
-     * Add cardids
-     *
-     * @param \Wind\Bundle\MtgparseBundle\Entity\Cardid $cardids
-     * @return Cardtype
-     */
-    public function addCardid(\Wind\Bundle\MtgparseBundle\Entity\Cardid $cardids)
-    {
-        $this->cardids[] = $cardids;
-
-        return $this;
-    }
-
-    /**
-     * Remove cardids
-     *
-     * @param \Wind\Bundle\MtgparseBundle\Entity\Cardid $cardids
-     */
-    public function removeCardid(\Wind\Bundle\MtgparseBundle\Entity\Cardid $cardids)
-    {
-        $this->cardids->removeElement($cardids);
-    }
-
-    /**
-     * Get cardids
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCardids()
-    {
-        return $this->cardids;
+        return $this->rariry;
     }
 
     /**
      * Add cards
      *
      * @param \Wind\Bundle\MtgparseBundle\Entity\Card $cards
-     * @return Cardtype
+     * @return Cardrarity
      */
     public function addCard(\Wind\Bundle\MtgparseBundle\Entity\Card $cards)
     {
