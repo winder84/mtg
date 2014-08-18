@@ -66,21 +66,21 @@ class Card
     /**
      * @var string
      *
-     * @ORM\Column(name="cardtext", type="text")
+     * @ORM\Column(name="cardtext", type="text", nullable=true)
      */
     private $cardtext;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="flavortext", type="text")
+     * @ORM\Column(name="flavortext", type="text", nullable=true)
      */
     private $flavortext;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="pt", type="string", length=255)
+     * @ORM\Column(name="pt", type="string", length=255, nullable=true)
      */
     private $pt;
 
