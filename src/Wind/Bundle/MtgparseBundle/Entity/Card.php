@@ -52,7 +52,7 @@ class Card
     /**
      * @var integer
      *
-     * @ORM\Column(name="convertedmc", type="integer")
+     * @ORM\Column(name="convertedmc", type="integer", nullable=true)
      */
     private $convertedmc;
 

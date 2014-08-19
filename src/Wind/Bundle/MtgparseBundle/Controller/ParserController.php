@@ -124,7 +124,7 @@ class ParserController extends Controller
 
 
 
-		for ($i = 7; $i <= 3000; $i++) {
+		for ($i = 5000; $i <= 6000; $i++) {
 			$cardObj = $em->getRepository('WindMtgparseBundle:Card');
 			$cardIdObj = $em->getRepository('WindMtgparseBundle:Cardid');
 			$cardTypeObj = $em->getRepository('WindMtgparseBundle:Cardtype');
