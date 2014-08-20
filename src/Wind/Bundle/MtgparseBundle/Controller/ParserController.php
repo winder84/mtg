@@ -135,24 +135,24 @@ class ParserController extends Controller
 //			'msgs' => $msgs
 //		));
 
-		for ($i = 1; $i <= 1; $i++) {
-			$cardIdObj = $cardIdObj->findOneById($i);
-			$cardId = $cardIdObj->getCardId();
-			$cardObj = $cardObj->findOneBy(array(
+		for ($i = 1; $i <= 1000; $i++) {
+			$cardIdOne = $cardIdObj->findOneById($i);
+			$cardId = $cardIdOne->getCardId();
+			$cardOne = $cardObj->findOneBy(array(
 				'cardId' => $cardId
 			));
-			if (!$cardObj) {
-				$cardObj = new Card();
+			if (!$cardOne) {
+				$cardOne = new Card();
 				$cardUrl = "http://gatherer.wizards.com/Pages/Card/Details.aspx?printed=true&multiverseid={$cardId}";
 				$imgUrl = "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid={$cardId}&type=card";
 				$cardData = file_get_contents($cardUrl, false, $context);
 				preg_match('!Card Name:</div>\s*<div class="value">\s*(.*?)</div!si', $cardData, $cardsData);
 				if (isset($cardsData[1])) {
-					$cardObj->setName($cardsData[1]);
+					$cardOne->setName($cardsData[1]);
 				}
 				preg_match('!Converted Mana Cost:</div>\s*<div class="value">\s*(.*?)<!si', $cardData, $cardsData);
 				if (isset($cardsData[1])) {
-					$cardObj->setConvertedmc($cardsData[1]);
+					$cardOne->setConvertedmc($cardsData[1]);
 				}
 				preg_match('!Types:</div>\s*<div class="value">\s*(.*?)<!si', $cardData, $cardsData);
 				if (isset($cardsData[1])) {
@@ -164,19 +164,19 @@ class ParserController extends Controller
 						$cardType = new Cardtype();
 						$cardType->setType($type);
 					}
-					$cardObj->addCardtype($cardType);
+					$cardOne->addCardtype($cardType);
 				}
 				preg_match('!Card Text:</div>\s*<div class="value">\s*(.*?)</div!si', $cardData, $cardsData);
 				if (isset($cardsData[1])) {
-					$cardObj->setCardtext(trim(strip_tags($cardsData[1])));
+					$cardOne->setCardtext(trim(strip_tags($cardsData[1])));
 				}
 				preg_match('!Flavor Text:</div>\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
 				if (isset($cardsData[1])) {
-					$cardObj->setFlavortext(trim(strip_tags($cardsData[1])));
+					$cardOne->setFlavortext(trim(strip_tags($cardsData[1])));
 				}
 				preg_match('!P/T:</b>\s*</div>\s*<div class="value">\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
 				if (isset($cardsData[1])) {
-					$cardObj->setPt($cardsData[1]);
+					$cardOne->setPt($cardsData[1]);
 				}
 				preg_match('!Rarity:</div>\s*<div class="value">\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
 				if (isset($cardsData[1])) {
@@ -188,11 +188,11 @@ class ParserController extends Controller
 						$cardRarity = new Cardrarity();
 						$cardRarity->setRariry($rarity);
 					}
-					$cardObj->addCardrarity($cardRarity);
+					$cardOne->addCardrarity($cardRarity);
 				}
 
 				$isNewImage = true;
-				foreach ($cardObj->getImages()->toArray() as $cc) {
+				foreach ($cardOne->getImages()->toArray() as $cc) {
 					if ($cc->getName() == $cardId) {
 						$isNewImage = false;
 					}
@@ -211,20 +211,22 @@ class ParserController extends Controller
 							$img = new Image();
 							$img->setName($cardId);
 						}
-						$cardObj->addImage($img);
+						$cardOne->addImage($img);
 					}
 				}
-				foreach ($cardIdObj->getCardcolors()->toArray() as $cc) {
-					$cardObj->addCardcolor($cc);
+				foreach ($cardIdOne->getCardcolors()->toArray() as $cc) {
+					$cardOne->addCardcolor($cc);
 				}
-				foreach ($cardIdObj->getCardtypes()->toArray() as $tt) {
-					$cardObj->addCardtype($tt);
+				foreach ($cardIdOne->getCardtypes()->toArray() as $tt) {
+					if ($tt->getType() != $type) {
+						$cardOne->addCardtype($tt);
+					}
 				}
-				$cardObj->setCardId($cardId);
+				$cardOne->setCardId($cardId);
 				$em->persist($cardType, true);
 				$em->persist($cardRarity, true);
 				$em->persist($img, true);
-				$em->persist($cardObj, true);
+				$em->persist($cardOne, true);
 				$em->flush();
 			}
 		}
