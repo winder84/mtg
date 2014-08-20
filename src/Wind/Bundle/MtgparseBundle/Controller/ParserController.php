@@ -135,7 +135,7 @@ class ParserController extends Controller
 //			'msgs' => $msgs
 //		));
 
-		for ($i = 400; $i <= 1000; $i++) {
+		for ($i = 1500; $i <= 2500; $i++) {
 			$cardIdOne = $cardIdObj->findOneById($i);
 			$cardId = $cardIdOne->getCardId();
 			$cardOne = $cardObj->findOneBy(array(
@@ -203,16 +203,17 @@ class ParserController extends Controller
 					if (!is_dir($uploadDir)) {
 						mkdir($uploadDir);
 					}
-					if (file_put_contents($uploadDir . $cardId . '.jpg', $imgData)) {
-						$img = $cardImageObj->findOneBy(array(
-							'name' => $cardId
-						));
-						if (!$img) {
-							$img = new Image();
-							$img->setName($cardId);
-						}
-						$cardOne->addImage($img);
+					if (!file_exists($uploadDir . $cardId . '.jpg')) {
+						file_put_contents($uploadDir . $cardId . '.jpg', $imgData);
 					}
+					$img = $cardImageObj->findOneBy(array(
+						'name' => $cardId
+					));
+					if (!$img) {
+						$img = new Image();
+						$img->setName($cardId);
+					}
+					$cardOne->addImage($img);
 				}
 				foreach ($cardIdOne->getCardcolors()->toArray() as $cc) {
 					$cardOne->addCardcolor($cc);
