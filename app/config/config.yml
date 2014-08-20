@@ -57,8 +57,16 @@ doctrine:
         # path:     "%database_path%"
 
     orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
-        auto_mapping: true
+        default_entity_manager:  ~
+        auto_generate_proxy_classes:  false
+        proxy_dir:            "%kernel.cache_dir%/doctrine/orm/Proxies"
+        proxy_namespace:      Proxies
+        # search for the "ResolveTargetEntityListener" class for a cookbook about this
+        resolve_target_entities: []
+        entity_managers:
+                    defaults:
+                        mappings:
+                          WindMtgparseBundle: ~
 
 # Swiftmailer Configuration
 swiftmailer:
