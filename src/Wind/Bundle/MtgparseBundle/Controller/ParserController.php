@@ -135,7 +135,7 @@ class ParserController extends Controller
 //			'msgs' => $msgs
 //		));
 
-		for ($i = 1; $i <= 1000; $i++) {
+		for ($i = 400; $i <= 1000; $i++) {
 			$cardIdOne = $cardIdObj->findOneById($i);
 			$cardId = $cardIdOne->getCardId();
 			$cardOne = $cardObj->findOneBy(array(
@@ -218,7 +218,7 @@ class ParserController extends Controller
 					$cardOne->addCardcolor($cc);
 				}
 				foreach ($cardIdOne->getCardtypes()->toArray() as $tt) {
-					if ($tt->getType() != $type) {
+					if ($tt->getId() != $cardType->getId()) {
 						$cardOne->addCardtype($tt);
 					}
 				}
