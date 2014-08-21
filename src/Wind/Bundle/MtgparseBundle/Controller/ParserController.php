@@ -135,102 +135,102 @@ class ParserController extends Controller
 //			'msgs' => $msgs
 //		));
 
-		for ($i = 1500; $i <= 2500; $i++) {
-			$cardIdOne = $cardIdObj->findOneById($i);
-			$cardId = $cardIdOne->getCardId();
-			$cardOne = $cardObj->findOneBy(array(
-				'cardId' => $cardId
-			));
-			if (!$cardOne) {
-				$cardOne = new Card();
-				$cardUrl = "http://gatherer.wizards.com/Pages/Card/Details.aspx?printed=true&multiverseid={$cardId}";
-				$imgUrl = "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid={$cardId}&type=card";
-				$cardData = file_get_contents($cardUrl, false, $context);
-				preg_match('!Card Name:</div>\s*<div class="value">\s*(.*?)</div!si', $cardData, $cardsData);
-				if (isset($cardsData[1])) {
-					$cardOne->setName($cardsData[1]);
-				}
-				preg_match('!Converted Mana Cost:</div>\s*<div class="value">\s*(.*?)<!si', $cardData, $cardsData);
-				if (isset($cardsData[1])) {
-					$cardOne->setConvertedmc($cardsData[1]);
-				}
-				preg_match('!Types:</div>\s*<div class="value">\s*(.*?)<!si', $cardData, $cardsData);
-				if (isset($cardsData[1])) {
-					$type = $cardsData[1];
-					$cardType = $cardTypeObj->findOneBy(array(
-						'type' => $type
-					));
-					if (!$cardType) {
-						$cardType = new Cardtype();
-						$cardType->setType($type);
-					}
-					$cardOne->addCardtype($cardType);
-				}
-				preg_match('!Card Text:</div>\s*<div class="value">\s*(.*?)</div!si', $cardData, $cardsData);
-				if (isset($cardsData[1])) {
-					$cardOne->setCardtext(trim(strip_tags($cardsData[1])));
-				}
-				preg_match('!Flavor Text:</div>\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
-				if (isset($cardsData[1])) {
-					$cardOne->setFlavortext(trim(strip_tags($cardsData[1])));
-				}
-				preg_match('!P/T:</b>\s*</div>\s*<div class="value">\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
-				if (isset($cardsData[1])) {
-					$cardOne->setPt($cardsData[1]);
-				}
-				preg_match('!Rarity:</div>\s*<div class="value">\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
-				if (isset($cardsData[1])) {
-					$rarity = trim(strip_tags($cardsData[1]));
-					$cardRarity = $cardRarityObj->findOneBy(array(
-						'rariry' => $rarity
-					));
-					if (!$cardRarity) {
-						$cardRarity = new Cardrarity();
-						$cardRarity->setRariry($rarity);
-					}
-					$cardOne->addCardrarity($cardRarity);
-				}
-
-				$isNewImage = true;
-				foreach ($cardOne->getImages()->toArray() as $cc) {
-					if ($cc->getName() == $cardId) {
-						$isNewImage = false;
-					}
-				}
-				if ($isNewImage) {
-					$imgData = file_get_contents($imgUrl, false, $context);
-					$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
-					if (!is_dir($uploadDir)) {
-						mkdir($uploadDir);
-					}
-					if (!file_exists($uploadDir . $cardId . '.jpg')) {
-						file_put_contents($uploadDir . $cardId . '.jpg', $imgData);
-					}
-					$img = $cardImageObj->findOneBy(array(
-						'name' => $cardId
-					));
-					if (!$img) {
-						$img = new Image();
-						$img->setName($cardId);
-					}
-					$cardOne->addImage($img);
-				}
-				foreach ($cardIdOne->getCardcolors()->toArray() as $cc) {
-					$cardOne->addCardcolor($cc);
-				}
-				foreach ($cardIdOne->getCardtypes()->toArray() as $tt) {
-					if ($tt->getId() != $cardType->getId()) {
-						$cardOne->addCardtype($tt);
-					}
-				}
-				$cardOne->setCardId($cardId);
-				$em->persist($cardType, true);
-				$em->persist($cardRarity, true);
-				$em->persist($img, true);
-				$em->persist($cardOne, true);
-				$em->flush();
-			}
-		}
+//		for ($i = 1; $i <= 7788; $i++) {
+//			$cardIdOne = $cardIdObj->findOneById($i);
+//			$cardId = $cardIdOne->getCardId();
+//			$cardOne = $cardObj->findOneBy(array(
+//				'cardId' => $cardId
+//			));
+//			if (!$cardOne) {
+//				$cardOne = new Card();
+//				$cardUrl = "http://gatherer.wizards.com/Pages/Card/Details.aspx?printed=true&multiverseid={$cardId}";
+//				$imgUrl = "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid={$cardId}&type=card";
+//				$cardData = file_get_contents($cardUrl, false, $context);
+//				preg_match('!Card Name:</div>\s*<div class="value">\s*(.*?)</div!si', $cardData, $cardsData);
+//				if (isset($cardsData[1])) {
+//					$cardOne->setName($cardsData[1]);
+//				}
+//				preg_match('!Converted Mana Cost:</div>\s*<div class="value">\s*(.*?)<!si', $cardData, $cardsData);
+//				if (isset($cardsData[1])) {
+//					$cardOne->setConvertedmc($cardsData[1]);
+//				}
+//				preg_match('!Types:</div>\s*<div class="value">\s*(.*?)<!si', $cardData, $cardsData);
+//				if (isset($cardsData[1])) {
+//					$type = $cardsData[1];
+//					$cardType = $cardTypeObj->findOneBy(array(
+//						'type' => $type
+//					));
+//					if (!$cardType) {
+//						$cardType = new Cardtype();
+//						$cardType->setType($type);
+//					}
+//					$cardOne->addCardtype($cardType);
+//				}
+//				preg_match('!Card Text:</div>\s*<div class="value">\s*(.*?)</div!si', $cardData, $cardsData);
+//				if (isset($cardsData[1])) {
+//					$cardOne->setCardtext(trim(strip_tags($cardsData[1])));
+//				}
+//				preg_match('!Flavor Text:</div>\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
+//				if (isset($cardsData[1])) {
+//					$cardOne->setFlavortext(trim(strip_tags($cardsData[1])));
+//				}
+//				preg_match('!P/T:</b>\s*</div>\s*<div class="value">\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
+//				if (isset($cardsData[1])) {
+//					$cardOne->setPt($cardsData[1]);
+//				}
+//				preg_match('!Rarity:</div>\s*<div class="value">\s*(.*?)</div>\s*</div!si', $cardData, $cardsData);
+//				if (isset($cardsData[1])) {
+//					$rarity = trim(strip_tags($cardsData[1]));
+//					$cardRarity = $cardRarityObj->findOneBy(array(
+//						'rariry' => $rarity
+//					));
+//					if (!$cardRarity) {
+//						$cardRarity = new Cardrarity();
+//						$cardRarity->setRariry($rarity);
+//					}
+//					$cardOne->addCardrarity($cardRarity);
+//				}
+//
+//				$isNewImage = true;
+//				foreach ($cardOne->getImages()->toArray() as $cc) {
+//					if ($cc->getName() == $cardId) {
+//						$isNewImage = false;
+//					}
+//				}
+//				if ($isNewImage) {
+//					$imgData = file_get_contents($imgUrl, false, $context);
+//					$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
+//					if (!is_dir($uploadDir)) {
+//						mkdir($uploadDir);
+//					}
+//					if (!file_exists($uploadDir . $cardId . '.jpg')) {
+//						file_put_contents($uploadDir . $cardId . '.jpg', $imgData);
+//					}
+//					$img = $cardImageObj->findOneBy(array(
+//						'name' => $cardId
+//					));
+//					if (!$img) {
+//						$img = new Image();
+//						$img->setName($cardId);
+//					}
+//					$cardOne->addImage($img);
+//				}
+//				foreach ($cardIdOne->getCardcolors()->toArray() as $cc) {
+//					$cardOne->addCardcolor($cc);
+//				}
+//				foreach ($cardIdOne->getCardtypes()->toArray() as $tt) {
+//					if ($tt->getId() != $cardType->getId()) {
+//						$cardOne->addCardtype($tt);
+//					}
+//				}
+//				$cardOne->setCardId($cardId);
+//				$em->persist($cardType, true);
+//				$em->persist($cardRarity, true);
+//				$em->persist($img, true);
+//				$em->persist($cardOne, true);
+//				$em->flush();
+//			}
+//		}
 
 		return $this->render('WindMtgparseBundle:Parser:parsing.html.twig', array(
 			'retrys' => array(),
